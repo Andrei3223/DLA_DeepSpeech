@@ -9,6 +9,7 @@ class CTCLossWrapper(CTCLoss):
     ) -> Tensor:
         log_probs_t = torch.transpose(log_probs, 0, 1)
 
+        # print("in loss", log_probs_t.shape, log_probs_length, text_encoded.shape, text_encoded_length)
         loss = super().forward(
             log_probs=log_probs_t,
             targets=text_encoded,

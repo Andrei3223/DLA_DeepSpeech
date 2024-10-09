@@ -1,0 +1,6 @@
+_target_: src.model.DeepSpeech
+n_feats: 128
+rnn_hidden_size: 512
+rnn_blocks_num: 3
+rnn_dropout: 0.
+n_tokens: 28 

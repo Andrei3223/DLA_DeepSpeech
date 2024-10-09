@@ -1,5 +1,5 @@
 defaults:
-  - model: baseline
+  - model: DeepSpeech
   - writer: wandb
   - metrics: example
   - datasets: example
