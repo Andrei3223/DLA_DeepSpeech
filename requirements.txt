@@ -17,3 +17,4 @@ pre-commit
 
 wget
 editdistance
+datasets
