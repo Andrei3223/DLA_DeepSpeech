@@ -1,12 +1,15 @@
 train:
-  _target_: src.datasets.LibrispeechDataset
+  # _target_: src.datasets.LibrispeechDataset
+  _target_: /kaggle/input/librispeech
   part: "train-clean-100"
   instance_transforms: ${transforms.instance_transforms.train}
 val:
-  _target_: src.datasets.LibrispeechDataset
+  # _target_: src.datasets.LibrispeechDataset
+  _target_: /kaggle/input/librispeech
   part: "dev-clean"
   instance_transforms: ${transforms.instance_transforms.inference}
 test:
-  _target_: src.datasets.LibrispeechDataset
+  # _target_: src.datasets.LibrispeechDataset
+  _target_: /kaggle/input/librispeech
   part: "test-clean"
   instance_transforms: ${transforms.instance_transforms.inference}
