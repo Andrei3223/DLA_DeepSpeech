@@ -10,7 +10,7 @@ optimizer:
   _target_: torch.optim.AdamW
   lr: 1e-3
 lr_scheduler:
-  _target_: torch.optim.lr_sheduler.StepLR
+  _target_: torch.optim.lr_scheduler.StepLR
   step_size: 5
   gamma: 0.5
   # _target_: torch.optim.lr_scheduler.OneCycleLR
