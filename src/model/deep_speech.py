@@ -11,15 +11,17 @@ RELU_UPPER_BOUND = 20
 class GRU(nn.Module):
     def __init__(self, input_size, hidden_size, dropout_param: int = 0):
         super(GRU, self).__init__()
-
+        
         self.net = nn.GRU(input_size=input_size, hidden_size=hidden_size, bidirectional=True,
                           batch_first=True, dropout=dropout_param)
-        self.batch_norm = nn.BatchNorm1d(hidden_size * 2)
+        # self.batch_norm = nn.BatchNorm1d(hidden_size * 2)
+        self.batch_norm = nn.BatchNorm1d(input_size)
 
     def forward(self, x):
+        x = self.batch_norm(x.transpose(1, 2)).transpose(2, 1)
         x, _ = self.net(x)
         # print("in rnn:", x.transpose(1, 2).shape)
-        x = self.batch_norm(x.transpose(1, 2)).transpose(2, 1)
+        
         return x
 
 
@@ -77,11 +79,11 @@ class DeepSpeech(nn.Module):
         )
 
     def get_output_shape(self, input_shape: torch.Tensor, three_layers: bool = False):
-        first_conv_shape = get_conv_ouput_shape(input_shape, 41, 2)
-        second_conv_shape = get_conv_ouput_shape(first_conv_shape, 21, 2)
+        first_conv_shape = get_conv_ouput_shape(input_shape, 11, 2)
+        second_conv_shape = get_conv_ouput_shape(first_conv_shape, 11, 1)
         if not three_layers:
             return second_conv_shape
-        third_conv_shape = get_conv_ouput_shape(second_conv_shape, 21, 2)
+        third_conv_shape = get_conv_ouput_shape(second_conv_shape, 11, 1)
 
         return third_conv_shape
 
