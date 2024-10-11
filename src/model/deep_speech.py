@@ -14,14 +14,14 @@ class GRU(nn.Module):
         
         self.net = nn.GRU(input_size=input_size, hidden_size=hidden_size, bidirectional=True,
                           batch_first=True, dropout=dropout_param)
-        # self.batch_norm = nn.BatchNorm1d(hidden_size * 2)
-        self.batch_norm = nn.BatchNorm1d(input_size)
+        self.batch_norm = nn.BatchNorm1d(hidden_size * 2)
+        # self.batch_norm = nn.BatchNorm1d(input_size)
 
     def forward(self, x):
-        x = self.batch_norm(x.transpose(1, 2)).transpose(2, 1)
+        # x = self.batch_norm(x.transpose(1, 2)).transpose(2, 1)
         x, _ = self.net(x)
         # print("in rnn:", x.transpose(1, 2).shape)
-        
+        x = self.batch_norm(x.transpose(1, 2)).transpose(2, 1)
         return x
 
 
