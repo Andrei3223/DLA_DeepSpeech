@@ -7,12 +7,12 @@ defaults:
   - transforms: example_only_instance
   - _self_
 optimizer:
-  _target_: torch.optim.AdamW
+  _target_: torch.optim.Adam
   lr: 2e-4
 lr_scheduler:
   _target_: torch.optim.lr_scheduler.StepLR
   step_size: 500
-  gamma: 0.5
+  gamma: 0.7
   # _target_: torch.optim.lr_scheduler.OneCycleLR
   # max_lr: 1e-2
   # pct_start: 0.1
