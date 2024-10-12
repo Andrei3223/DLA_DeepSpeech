@@ -6,7 +6,7 @@ train:
     _target_: torchvision.transforms.v2.Compose
     transforms:
       - _target_: src.transforms.wav_augs.Gain
-        p: 0.5
+        p: 0.6
       - _target_: torchvision.transforms.v2.RandomChoice
         transforms:
           - _target_: src.transforms.wav_augs.HighPassFilter

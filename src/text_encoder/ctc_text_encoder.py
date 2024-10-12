@@ -1,5 +1,7 @@
 import re
 from string import ascii_lowercase
+from collections import defaultdict
+import numpy as np
 
 import torch
 
@@ -76,3 +78,34 @@ class CTCTextEncoder:
         text = text.lower()
         text = re.sub(r"[^a-z ]", "", text)
         return text
+
+    def expand_and_merge_path(self, dp, next_token_probs):
+        new_dp = defaultdict(float)
+        for ind, next_token_prob in enumerate(next_token_probs):
+            cur_char = self.ind2char[ind]
+            for (prefix, last_char), v in dp.items():
+                if last_char == cur_char:
+                    new_prefix = prefix
+                elif cur_char != self.EMPTY_TOK:
+                    new_prefix = prefix + cur_char
+                else:
+                    new_prefix = prefix
+                new_dp[(new_prefix, cur_char)] += v * next_token_prob
+        return new_dp
+
+    def truncate_paths(self, dp, beam_size):
+        return dict(sorted(list(dp.items()), key=lambda x: -x[1])[:beam_size])
+
+    def ctc_beam_search(self, probs, beam_size):
+        dp = {
+            ('', self.EMPTY_TOK): 1.0,
+        }
+        for prob in probs:
+            dp = self.expand_and_merge_path(dp, prob)
+            dp = self.truncate_paths(dp, beam_size)
+        dp = [(prefix, proba) for (prefix, _), proba in sorted(dp.items(), key=lambda x: -x[1])]
+        return dp
+
+    def ctc_decode_beam_search(self, log_probs, beam_size=3) -> str:
+        output = self.ctc_beam_search(np.exp(log_probs), beam_size)[0][0]
+        return output
