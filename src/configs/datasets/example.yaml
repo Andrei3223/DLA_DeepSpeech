@@ -1,6 +1,8 @@
 train:
   _target_: src.datasets.LibrispeechDataset
-  part: "train-clean-360"
+  part: "train-all"
+  max_audio_length: 25.0
+  max_text_length: 400
   instance_transforms: ${transforms.instance_transforms.train}
 val:
   _target_: src.datasets.LibrispeechDataset

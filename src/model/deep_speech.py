@@ -67,7 +67,7 @@ class DeepSpeech(nn.Module):
 
         self.rnn = nn.Sequential(
             *[
-                GRU(input_size=384 if i == 0 else rnn_hidden_size * 2,  # TODO delete constant
+                GRU(input_size=384 if i == 0 else rnn_hidden_size * 2,
                     hidden_size=rnn_hidden_size,
                     dropout_param=rnn_dropout,
                 ) for i in range(rnn_blocks_num)
