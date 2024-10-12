@@ -1,7 +1,7 @@
 _target_: src.logger.WandBWriter
 project_name: "asr_deepspeech"
 entity: null
-run_name: "AdamW3e-4Cos_instAugs"
+run_name: "AdamW3e-4Cos_instAugs_test"
 mode: "online"
 loss_names: ["loss"] # which losses to log (useful for multi-loss tasks, s.a. GANs)
 log_checkpoints: True # set to True if you want to log save_dir with checkpoints to W&B
