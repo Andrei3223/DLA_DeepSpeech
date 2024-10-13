@@ -1,4 +1,4 @@
 defaults:
-  - batch_transforms: example
+  - batch_transforms: batch_augs
   - instance_transforms: instance_augs
   - _self_

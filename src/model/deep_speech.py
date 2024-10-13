@@ -34,14 +34,12 @@ def get_conv_ouput_shape(initial, kernel, stride, pad=0, delay=1):
     return torch.floor(x / stride + 1).int()
 
 
-# class DeepSpeech(Base):
 class DeepSpeech(nn.Module):
     """
     DeepSpeech 2
     """
     def __init__(self, n_feats, n_tokens = 28, 
                 rnn_hidden_size: int = 512, rnn_blocks_num: int = 3, rnn_dropout: int = 0):
-        # super().__init__(n_feats, n_tokens)
         super().__init__()
 
         self.conv_2_layers = Sequential(

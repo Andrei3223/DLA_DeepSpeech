@@ -28,5 +28,4 @@ def collate_fn(dataset_items: list[dict]):
     result_batch["spectrogram"] = pad_sequence([item["spectrogram"].permute(2, 1, 0) for item in dataset_items], batch_first=True).squeeze(-1).permute(0, 2, 1)
     result_batch["spectrogram_length"] = torch.tensor([item["spectrogram"].shape[2] for item in dataset_items])
 
-    # raise RuntimeError(result_batch["spectrogram_length"])
     return result_batch
