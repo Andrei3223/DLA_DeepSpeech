@@ -117,7 +117,7 @@ class Trainer(BaseTrainer):
                 "predictions": pred,
                 "wer": wer,
                 "cer": cer,
-                # "audio": self.writer.wandb.Audio(audio_path),
+                "audio": self.writer.wandb.Audio(audio_path),
             }
         self.writer.add_table(
             "predictions", pd.DataFrame.from_dict(rows, orient="index")
