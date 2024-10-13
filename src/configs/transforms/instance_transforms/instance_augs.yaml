@@ -15,7 +15,7 @@ train:
             min_cutoff_freq: 400
             sample_rate: 16000
           - _target_: src.transforms.wav_augs.LowPassFilter
-            p: 0.4
+            p: 0.3
             max_cutoff_freq: 2000
             min_cutoff_freq: 750
             sample_rate: 16000

@@ -44,6 +44,6 @@ class BSWERMetric(BaseMetric):
         predictions = log_probs.cpu().detach().numpy()
         for log_prob_vec, length, target_text in zip(predictions, lengths, text):
             target_text = self.text_encoder.normalize_text(target_text)
-            pred_text = self.text_encoder.ctc_decode_beam_search(log_prob_vec[:length], self.beam)
+            pred_text = self.text_encoder.ctc_decode_beam_search(log_prob_vec[:length], self.beam, self.use_lm)
             wers.append(calc_wer(target_text, pred_text))
         return sum(wers) / len(wers)

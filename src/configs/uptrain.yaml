@@ -9,7 +9,7 @@ defaults:
   - _self_
 optimizer:
   _target_: torch.optim.AdamW
-  lr: 7e-6
+  lr: 3e-6
 # lr_scheduler:
 lr_scheduler:
   _target_: torch.optim.lr_scheduler.MultiStepLR
@@ -20,8 +20,8 @@ loss_function:
 text_encoder:
   _target_: src.text_encoder.CTCTextEncoder
 trainer:
-  log_step: 50
-  n_epochs: 50
+  log_step: 170
+  n_epochs: 170
   epoch_len: 200
   device_tensors: ["spectrogram", "text_encoded"] # which tensors should be on device (ex. GPU)
   resume_from: "/home/jupyter/datasphere/project/DLA_DeepSpeech/saved/AdamW3e-4Cos_instAugs_all/checkpoint-epoch120.pth" # null or path to the checkpoint dir with *.pth and config.yaml
