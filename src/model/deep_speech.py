@@ -1,27 +1,32 @@
-from torch import nn
-from torch.nn import Sequential
-from torch.nn import Conv2d
-import torch
 import math
+
+import torch
+from torch import nn
+from torch.nn import Conv2d, Sequential
 
 # from baseline_model import BaselineModel
 
 RELU_UPPER_BOUND = 20
 
+
 class GRU(nn.Module):
     def __init__(self, input_size, hidden_size, dropout_param: int = 0):
         super(GRU, self).__init__()
-        
-        self.net = nn.GRU(input_size=input_size, hidden_size=hidden_size, bidirectional=True,
-                          batch_first=True, dropout=dropout_param)
-        # self.batch_norm = nn.BatchNorm1d(hidden_size * 2)
+
+        self.net = nn.GRU(
+            input_size=input_size,
+            hidden_size=hidden_size,
+            bidirectional=True,
+            batch_first=True,
+            dropout=dropout_param,
+        )
+
         self.batch_norm = nn.BatchNorm1d(input_size)
 
     def forward(self, x):
         x = self.batch_norm(x.transpose(1, 2)).transpose(2, 1)
         x, _ = self.net(x)
-        # print("in rnn:", x.transpose(1, 2).shape)
-        # x = self.batch_norm(x.transpose(1, 2)).transpose(2, 1)
+
         return x
 
 
@@ -38,23 +43,30 @@ class DeepSpeech(nn.Module):
     """
     DeepSpeech 2
     """
-    def __init__(self, n_feats, n_tokens = 28, 
-                rnn_hidden_size: int = 512, rnn_blocks_num: int = 3, rnn_dropout: int = 0):
+
+    def __init__(
+        self,
+        n_feats,
+        n_tokens=28,
+        rnn_hidden_size: int = 512,
+        rnn_blocks_num: int = 3,
+        rnn_dropout: int = 0,
+    ):
         super().__init__()
 
         self.conv_2_layers = Sequential(
             Conv2d(1, 32, kernel_size=(41, 11), stride=(2, 2)),
             nn.BatchNorm2d(32),
-            nn.Hardtanh(0, RELU_UPPER_BOUND, inplace=True), 
+            nn.Hardtanh(0, RELU_UPPER_BOUND, inplace=True),
             Conv2d(32, 32, kernel_size=(21, 11), stride=(2, 1)),
             nn.BatchNorm2d(32),
-            nn.Hardtanh(0, RELU_UPPER_BOUND, inplace=True)
+            nn.Hardtanh(0, RELU_UPPER_BOUND, inplace=True),
         )
 
         self.conv_3_layers = Sequential(
             Conv2d(1, 32, kernel_size=(41, 11), stride=(2, 2)),
             nn.BatchNorm2d(32),
-            nn.Hardtanh(0, RELU_UPPER_BOUND, inplace=True), 
+            nn.Hardtanh(0, RELU_UPPER_BOUND, inplace=True),
             Conv2d(32, 32, kernel_size=(21, 11), stride=(2, 1)),
             nn.BatchNorm2d(32),
             nn.Hardtanh(0, RELU_UPPER_BOUND, inplace=True),
@@ -65,10 +77,12 @@ class DeepSpeech(nn.Module):
 
         self.rnn = nn.Sequential(
             *[
-                GRU(input_size=384 if i == 0 else rnn_hidden_size * 2,
+                GRU(
+                    input_size=384 if i == 0 else rnn_hidden_size * 2,
                     hidden_size=rnn_hidden_size,
                     dropout_param=rnn_dropout,
-                ) for i in range(rnn_blocks_num)
+                )
+                for i in range(rnn_blocks_num)
             ]
         )
 
@@ -96,35 +110,17 @@ class DeepSpeech(nn.Module):
             output (dict): output dict containing log_probs and
                 transformed lengths.
         """
-        # x = spectrogram.squeeze(0).transpose(1, 2)
         x = spectrogram.unsqueeze(1)
         batch_size = spectrogram.shape[0]
-        # print(spectrogram.shape, x.shape)
         x = self.conv_2_layers(x)
-        # x = self.conv_3_layers(x)
-        # print(x.shape)
 
         x = self.rnn(x.reshape(batch_size, -1, x.shape[-1]).permute((0, 2, 1)))
 
         output = self.FC(x)
 
         log_probs = nn.functional.log_softmax(output, dim=-1)
-        log_probs_length = self.transform_input_lengths(spectrogram_length)
         out_length = self.get_output_shape(spectrogram_length)
-        # print(log_probs.shape, spectrogram_length, out_length)
         return {"log_probs": log_probs, "log_probs_length": out_length}
-    
-    def transform_input_lengths(self, input_lengths):
-        """
-        As the network may compress the Time dimension, we need to know
-        what are the new temporal lengths after compression.
-
-        Args:
-            input_lengths (Tensor): old input lengths
-        Returns:
-            output_lengths (Tensor): new temporal lengths
-        """
-        return 
 
     def __str__(self):
         """
