@@ -7,7 +7,7 @@ URL = "https://drive.google.com/uc?id=1-5WqmMBK08NUUNO3oV0R17yIYl-Bu_Q3"
 LM_URL = "https://drive.google.com/uc?id=1G4HUjT_l9EvRkGuVMvkK7VOQFUxhy6Ca"
 
 root_dir = Path(__file__).absolute().resolve().parent
-model_dir = root_dir / "saved"
+model_dir = root_dir / "models"
 model_dir.mkdir(exist_ok=True, parents=True)
 
 output_model = "models/final_model_weights.pth"
