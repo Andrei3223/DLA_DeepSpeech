@@ -49,7 +49,7 @@ Follow these steps to install the project:
 
 2. Download necessary weights:
    ```bash
-   pre-commit install
+   python3 get_model_weights.py
    ```
 
 3. Install `pre-commit`:
