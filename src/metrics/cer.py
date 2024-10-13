@@ -40,6 +40,6 @@ class BSCERMetric(BaseMetric):
         predictions = log_probs.cpu().detach().numpy()
         for log_prob_vec, length, target_text in zip(predictions, lengths, text):
             target_text = self.text_encoder.normalize_text(target_text)
-            pred_text = self.text_encoder.ctc_decode_beam_search(log_prob_vec[:length], self.beam. self.use_lm)
+            pred_text = self.text_encoder.ctc_decode_beam_search(log_prob_vec[:length], self.beam, self.use_lm)
             cers.append(calc_cer(target_text, pred_text))
         return sum(cers) / len(cers)

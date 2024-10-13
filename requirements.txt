@@ -20,4 +20,4 @@ editdistance
 datasets
 
 pillow
-kenlm
+pyctcdecode

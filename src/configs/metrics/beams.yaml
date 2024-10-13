@@ -5,6 +5,8 @@ inference: # metrics that are calculated during inference (eval)
   - _target_: src.metrics.ArgmaxWERMetric
     name: "WER_(Argmax)"
   - _target_: src.metrics.BSWERMetric
-    name: "WER_(BeamSearch)"
+    name: "WER_(BeamSearch+LM)"
+    use_lm: True
   - _target_: src.metrics.BSCERMetric
-    name: "CER_(BeamSearch)"
+    name: "CER_(BeamSearch+LM)"
+    use_lm: True

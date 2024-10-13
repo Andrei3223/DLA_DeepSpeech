@@ -5,8 +5,7 @@ import numpy as np
 
 import torch
 
-# from pyctcdecode import build_ctcdecoder
-# import kenlm
+from pyctcdecode import build_ctcdecoder
 
 
 class CTCTextEncoder:
@@ -28,11 +27,11 @@ class CTCTextEncoder:
         self.ind2char = dict(enumerate(self.vocab))
         self.char2ind = {v: k for k, v in self.ind2char.items()}
 
-        # self.model_path = 'lowercase_3-gram.pruned.1e-7.arpa' if "lm_model_path" not in kwargs else kwargs["lm_model_path"]
+        self.model_path = 'src/utils/lowercase_3-gram.pruned.1e-7.arpa' if "lm_model_path" not in kwargs else kwargs["lm_model_path"]
         
-        # self.lm_beam_search = build_ctcdecoder([""] + [i for i in ascii_lowercase + ' '],
-        #                                        kenlm_model_path=self.model_path,
-        #                                        alpha=0.5, beta=0.15)
+        self.lm_beam_search = build_ctcdecoder([""] + [i for i in ascii_lowercase + ' '],
+                                               kenlm_model_path=self.model_path,
+                                               alpha=0.5, beta=0.15)
 
     def __len__(self):
         return len(self.vocab)
@@ -110,10 +109,9 @@ class CTCTextEncoder:
         dp = [(prefix, proba) for (prefix, _), proba in sorted(dp.items(), key=lambda x: -x[1])]
         return dp
 
-    def ctc_decode_beam_search(self, log_probs, beam_size=3, use_lm=False) -> str:
-        # if use_lm is False:
-        #     output = self.ctc_beam_search(np.exp(log_probs), beam_size)[0][0]
-        # else:
-        #     output = self.lm_beam_search.decode(np.exp(log_probs))
-        output = self.ctc_beam_search(np.exp(log_probs), beam_size)[0][0]
+    def ctc_decode_beam_search(self, log_probs, beam_size=7, use_lm=False) -> str:
+        if use_lm is False:
+            output = self.ctc_beam_search(np.exp(log_probs), beam_size)[0][0]
+        else:
+            output = self.lm_beam_search.decode(np.exp(log_probs))
         return output
