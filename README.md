@@ -10,9 +10,7 @@
 
 ## About
 
-This repository contains a template for solving ASR task with PyTorch. This template branch is a part of the [HSE DLA course](https://github.com/markovka17/dla) ASR homework. Some parts of the code are missing (or do not follow the most optimal design choices...) and students are required to fill these parts themselves (as well as writing their own models, etc.).
-
-See the task assignment [here](https://github.com/markovka17/dla/tree/2024/hw1_asr).
+This repository contains an implementation of DeepSpeech2 model solving ASR task with PyTorch.
 
 ## Installation
 
@@ -49,7 +47,12 @@ Follow these steps to install the project:
    pip install -r requirements.txt
    ```
 
-2. Install `pre-commit`:
+2. Download necessary weights:
+   ```bash
+   pre-commit install
+   ```
+
+3. Install `pre-commit`:
    ```bash
    pre-commit install
    ```
