@@ -9,7 +9,7 @@ class FreqMasking(nn.Module):
         self.apply_prob = p
 
     def __call__(self, data: Tensor):
-        return data if rand(1) < self.apply_prob else self.transform(data)
+        return self.transform(data) if rand(1) < self.apply_prob else data
         
 
 
@@ -20,4 +20,4 @@ class TimeMasking(nn.Module):
         self.apply_prob = p
 
     def __call__(self, data: Tensor):
-        return data if rand(1) < self.apply_prob else self.transform(data)
+        return self.transform(data) if rand(1) < self.apply_prob else data
